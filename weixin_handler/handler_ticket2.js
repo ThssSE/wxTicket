@@ -16,7 +16,6 @@ var alphabet = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM0123456789";
 
 var act_cache={};
 var rem_cache={};
-var tik_cache={};
 var usr_lock={};
 
 exports.clearCache=function()
@@ -55,7 +54,6 @@ function verifyActivities(actKey,ifFail,ifSucc)
             return;
         }
         act_cache[actKey]=null;
-        tik_cache[actKey]=null;
         ifFail();
         return;
     }
@@ -80,22 +78,6 @@ function verifyActivities(actKey,ifFail,ifSucc)
         else
         {
             ifFail(docs[0].book_start-current);
-            if (tik_cache[actKey]==null)
-            {
-                lock.acquire("rem_tik_fetcher",function()
-                {
-                    if (tik_cache[actKey]!=null)
-                    {
-                        lock.release("rem_tik_fetcher");
-                        return;
-                    }
-                    tik_cache[actKey]={};
-                    tik_cache[actKey].tikMap={};
-                    tik_cache[actKey].usrMap={};
-                    lock.release("rem_tik_fetcher");
-                    return;
-                });
-            }
             return;
         }
     });
@@ -104,22 +86,22 @@ function getRandomString()
 {
     var ret="";
 
-    for (var i=0;i<13;i++)
+    for (var i=0;i<32;i++)
         ret+=alphabet[Math.floor(Math.random()*alphabet.length)];
     return ret;
 }
 //Attentez: this function can only be called on condition that the collection is locked.
-function generateUniqueCode(callback,prefix,actKey)
+function generateUniqueCode(callback)
 {
-    while (true)
+    var tickCode=getRandomString();
+    db[TICKET_DB].find({unique_id:tickCode},function(err,docs)
     {
-        var tickCode=prefix+"_"+getRandomString();
-        if (tik_cache[actKey].tikMap[tickCode]==null)
-        {
+        if (err) return;
+        if (docs.length==0)
             callback(tickCode);
-            return;
-        }
-    }
+        else
+            generateUniqueCode(callback);
+    })
 }
 function presentTicket(msg,res,tick,act)
 {
@@ -155,37 +137,10 @@ function fetchRemainTicket(key,callback)
                 lock.release("rem_tik_fetcher");
                 return;
             }
-            if (tik_cache[key]==null)
-            {
-                tik_cache[key]={};
-                tik_cache[key].tikMap={};
-                tik_cache[key].usrMap={};
-                db[TICKET_DB].find({activity:docs[0]._id},function(err2,docs2)
-                {
-                    if (err2)
-                    {
-                        lock.release("rem_tik_fetcher");
-                        return;
-                    }
-                    for (var i=0;i<docs2.length;i++)
-                    {
-                        tik_cache[key].tikMap[docs2[i].unique_id]=true;
-                        if (docs2[i].status!=0)
-                            tik_cache[key].usrMap[docs2[i].stu_id]=true;
-                    }
-                    rem_cache[key]=docs[0].remain_tickets;
-                    lock.release("rem_tik_fetcher");
-                    callback();
-                    return;
-                });
-            }
-            else
-            {
-                rem_cache[key]=docs[0].remain_tickets;
-                lock.release("rem_tik_fetcher");
-                callback();
-                return;
-            }
+            rem_cache[key]=docs[0].remain_tickets;
+            lock.release("rem_tik_fetcher");
+            callback();
+            return;
         });
     });
 }
@@ -201,11 +156,6 @@ function getTimeFormat(timeInMS)
     if (hou+min+sec==0)
         return "1秒";
     return (hou>0?hou+"小时":"")+(min>0?min+"分":"")+(sec>0?sec+"秒":"");
-}
-
-function needValidateMsg(msg) {
-  return template.getPlainTextTemplate(msg,'<a href="' + urls.validateAddress
-    + '?openid=' + msg.FromUserName +  '">请先点我绑定学号。</a>');
 }
 
 exports.check_get_ticket=function(msg)
@@ -242,7 +192,7 @@ exports.faire_get_ticket=function(msg,res)
     verifyStudent(openID,function()
     {
         //WARNING: may change to direct user to bind
-        res.send(needValidateMsg(msg));
+        res.send(template.getPlainTextTemplate(msg,"请先绑定学号。"));
     },function(stuID)
     {
         if (usr_lock[stuID]!=null)
@@ -259,23 +209,23 @@ exports.faire_get_ticket=function(msg,res)
                 res.send(template.getPlainTextTemplate(msg,"该活动将在 "+getTimeFormat(tl)+" 后开始抢票，请耐心等待！"));
         },function(actID,staticACT)
         {
-            fetchRemainTicket(actName,function()
+            //Attentez: unlike stuID which is THUid, act id is simply act._id
+            db[TICKET_DB].find({stu_id:stuID, activity:actID, status:{$ne:0}},function(err,docs)
             {
-                //Attentez: unlike stuID which is THUid, act id is simply act._id
-                if (tik_cache[actName].usrMap[stuID]!=null)
+                if (err || docs.length>0)
                 {
                     res.send(template.getPlainTextTemplate(msg,"你已经有票啦，请用查票功能查看抢到的票吧！"));
                     return;
                 }
-                else
+                if (usr_lock[stuID]!=null)
                 {
-                    if (usr_lock[stuID]!=null)
-                    {
-                        res.send(template.getPlainTextTemplate(msg,"您的抢票请求正在处理中，请稍后通过查票功能查看抢票结果(/▽＼)"));
-                        return;
-                    }
-                    usr_lock[stuID]="true";
+                    res.send(template.getPlainTextTemplate(msg,"您的抢票请求正在处理中，请稍后通过查票功能查看抢票结果(/▽＼)"));
+                    return;
+                }
+                usr_lock[stuID]="true";
 
+                fetchRemainTicket(actName,function()
+                {
                     if (rem_cache[actName]==0)
                     {
                         usr_lock[stuID]=null;
@@ -297,11 +247,8 @@ exports.faire_get_ticket=function(msg,res)
                             res.send(template.getPlainTextTemplate(msg,"(╯‵□′)╯︵┻━┻"));
                             return;
                         }
-                        var ss=actID.toString();
                         generateUniqueCode(function(tiCode)
                         {
-                            tik_cache[actName].tikMap[tiCode]=true;
-                            tik_cache[actName].usrMap[stuID]=true;
                             db[TICKET_DB].insert(
                             {
                                 stu_id:     stuID,
@@ -316,9 +263,9 @@ exports.faire_get_ticket=function(msg,res)
                                 presentTicket(msg,res,{unique_id:tiCode},staticACT);
                                 return;
                             });
-                        },ss.substr(0,8)+ss.substr(14),actName);
+                        });
                     });
-                }
+                });
             });
         });
     });
@@ -349,7 +296,7 @@ exports.faire_reinburse_ticket=function(msg,res)
     verifyStudent(openID,function()
     {
         //WARNING: may change to direct user to bind
-        res.send(needValidateMsg(msg));
+        res.send(template.getPlainTextTemplate(msg,"请先绑定学号。"));
     },function(stuID)
     {
         verifyActivities(actName,function()
@@ -390,7 +337,6 @@ exports.faire_reinburse_ticket=function(msg,res)
                     },{multi:false},function()
                     {
                         rem_cache[actName]++;
-                        tik_cache[actName].usrMap[stuID]=null;
                         res.send(template.getPlainTextTemplate(msg,"退票成功。"));
                         return;
                     });
@@ -434,7 +380,7 @@ exports.faire_list_ticket=function(msg,res)
     verifyStudent(openID,function()
     {
         //WARNING: may change to direct user to bind
-        res.send(needValidateMsg(msg));
+        res.send(template.getPlainTextTemplate(msg,"请先绑定学号。"));
     },function(stuID)
     {
         db[TICKET_DB].find(
