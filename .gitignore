@@ -3,3 +3,6 @@ node_modules/*
 /*.pid
 /*.sh
 /public/uploadpics/*
+/nohup.out
+/db/
+/db.log
