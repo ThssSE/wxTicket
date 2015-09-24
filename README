@@ -28,7 +28,7 @@ what to modify?
     To modify weixin appid & token & appsecret:  weixin_basic/settings.js
     #REMEMBER TO ENSURE INDEX IN MONGODB:
         ensure ticket with index: stu_id & activity
+        ensure ticket with index: activity
         ensure student with index: weixin_id
         ensure seat with index: activity
 
-    #For TICKET, ensure that activity is also an index.
