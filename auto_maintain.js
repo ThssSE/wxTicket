@@ -7,7 +7,7 @@ var urls = require('./address_configure.js');
 var currentHour=(new Date()).getHours();
 if (currentHour!=4)
 {
-    console.log("Wrong time to exec.")
+    console.log("Wrong time to exec: ", currentHour);
     if (urls.autoRefresh==true)
     {
         cm.isExit=true;
