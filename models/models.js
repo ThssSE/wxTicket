@@ -12,7 +12,8 @@ exports.students = students;
 exports.admins = admins;
 exports.seats = seats;
 
-exports.db = mongojs('mongodb://localhost/ticket', [tickets, activities, students, admins, seats]);
+//exports.db = mongojs('mongodb://localhost/ticket', [tickets, activities, students, admins, seats]);
+exports.db = mongojs('mongo://localhost/zjzs', [tickets, activities, students, admins, seats]);
 
 exports.getIDClass=function(idValue)
 {

@@ -1,10 +1,13 @@
 var urls=require("../address_configure");
 
-exports.WEIXIN_TOKEN = 'F8ZFW1Cyzr5z6nNoJ5uZhA8iXEbe1hvX';
+//exports.WEIXIN_TOKEN = 'F8ZFW1Cyzr5z6nNoJ5uZhA8iXEbe1hvX';
+exports.WEIXIN_TOKEN = 'zijingzhisheng';
 
-exports.WEIXIN_APPID = 'wxba2385bd8746d139';
+//exports.WEIXIN_APPID = 'wxba2385bd8746d139';
+exports.WEIXIN_APPID = 'wx11353d338f38395d';
 
-exports.WEIXIN_SECRET = 'e6f9aea61c5511cb2adb0543e1f2f206';
+//exports.WEIXIN_SECRET = 'e6f9aea61c5511cb2adb0543e1f2f206';
+exports.WEIXIN_SECRET = 'c66e64bf06a757f3bff368c4c82aa254';
 
 var WEIXIN_EVENT_KEYS = {
 	'info_news': 'V1001_SCHOOL_NEWS',
