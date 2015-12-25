@@ -11,4 +11,4 @@ exports.choosearea=         "http://"+hostIP+"/choosearea";
 exports.chooseseat=         "http://"+hostIP+"/chooseseat";
 exports.help=               "http://"+hostIP+"/help/help.html";
 
-exports.autoRefresh=false;
+exports.autoRefresh=true;
