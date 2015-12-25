@@ -9,7 +9,7 @@ function show_time(t)//输入一个毫秒数，转成文字，用作倒计时
     var m=f(t%3600000/60000);
     var s=f(t%60000/1000);
     var ms=f(t%1000);
-    s=s+'.'+f(ms/100);
+    //s=s+'.'+f(ms/100);
     if (d)
         return d+'天'+h+'小时'+m+'分';
     if (h)

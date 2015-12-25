@@ -1,6 +1,6 @@
 
 
-var hostIP='127.0.0.1';
+var hostIP='wz.zjzs.levy.at';
 
 exports.IP=hostIP;
 exports.validateAddress=    "http://"+hostIP+"/validate";
@@ -11,4 +11,4 @@ exports.choosearea=         "http://"+hostIP+"/choosearea";
 exports.chooseseat=         "http://"+hostIP+"/chooseseat";
 exports.help=               "http://"+hostIP+"/help/help.html";
 
-exports.autoRefresh=false;
+exports.autoRefresh=true;

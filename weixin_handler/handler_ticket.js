@@ -477,7 +477,7 @@ exports.faire_list_ticket=function(msg,res)
                 tmpEle[template.rich_attr.description]=
                     "以下列表中是您抢到的票。(如果超过9个则可能有省略)";
 
-                list2Render.push(tmpEle);
+                //list2Render.push(tmpEle);
                 for (var i=0;i<docs.length;i++)
                 {
                     list2Render.push(renderTicketList(docs[i],actMap[docs[i].activity],false));
