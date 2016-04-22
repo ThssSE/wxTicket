@@ -86,7 +86,13 @@ function setValue(){
     else{
         var w = seat.substring(0,1);
         if(w <= 'E' && w >= 'A'){
-            $("#blockNotify").html(w);
+            $("#blockNotify").html(({
+              A: "池",
+              B: "楼",
+              C: "二",
+              D: "D",
+              E: "E",
+            })[w]);
             $("#block_" + w).children("[id^=area]").css("background-color", "#f0ee2d");
         }
     }
@@ -109,7 +115,11 @@ function setValue(){
     $("#ticket_time").html("日期："+ticket.time);
     $("#ticket_title").html(ticket.title);
     $("#ticket_ddl").html("选座截止时间： "+ticket.seatddl);
-    $("#ticket_seat").html("座位："+seat);
+    $("#ticket_seat").html("座位："+ ({
+      A: "一层池座",
+      B: "一层楼座",
+      C: "二层",
+    })[seat[0]]);
     $("#ticket_place").html("场馆："+ticket.place);
     
     $("#ticket_cancel").html("退票方式：回复 '退票 "+ ticket.name + "'");
