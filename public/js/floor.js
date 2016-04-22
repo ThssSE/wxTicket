@@ -3,9 +3,9 @@
 	$('#book_time').html(book_time);
 
 	//显示票数
-	$("#block_A a").html("A区(" + ticketLeft.A + ")");
-	$("#block_B a").html("B区(" + ticketLeft.B + ")");
-	$("#block_C a").html("C区(" + ticketLeft.C + ")");
+	$("#block_A a").html("一层池座(" + ticketLeft.A + ")");
+	$("#block_B a").html("一层楼座(" + ticketLeft.B + ")");
+	$("#block_C a").html("二层(" + ticketLeft.C + ")");
 	$("#block_D a").html("D区(" + ticketLeft.D + ")");
 	$("#block_E a").html("E区(" + ticketLeft.E + ")");
 
@@ -51,8 +51,13 @@ $("[id^=block]").click(function(){
 	$(this).css("background-image", "url(img/seat/"+selected+"_selected.png)");
 	
 	//更新文字信息
-	$("#seat_info").html(selected[6]+"区");
-	var avaiNumber;
+	var avaiNumber, blockNames = {
+      A: "一层池座",
+      B: "一层楼座",
+      C: "二层",
+      D: "D区",
+      E: "E区",
+  };
 	switch(selected[6]){
 		case 'A': avaiNumber = ticketLeft.A; break;
 		case 'B': avaiNumber = ticketLeft.B; break;
@@ -61,6 +66,7 @@ $("[id^=block]").click(function(){
 		case 'E': avaiNumber = ticketLeft.E; break;
 	}
 	$("#avaiNumber").html(avaiNumber);
+	$("#seat_info").html(blockNames[selected[6]]).attr("data-block-name", selected[6]+"区");
 })
 
 
@@ -74,7 +80,7 @@ $("#buttom_frame").click(function(){
 	    myForm.action=url;
 	    myForm.method='POST';
 	    myForm.ticket_id.value=ticket_id;
-	    myForm.seat.value=$("#seat_info").html();
+	    myForm.seat.value=$("#seat_info").attr("data-block-name");
 	    myForm.stateCode.value = stateCode;
 	    myForm.submit();
 	}
