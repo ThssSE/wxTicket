@@ -18,7 +18,8 @@
 	//无票的选区
 	for (i = 0; i < 5; i++){
 		if (ticketNum[i] == 0) {
-			$("#block_" + blockSign[i]).css("background-image", "url(img/seat/block_"+blockSign[i]+"_empty"+".png)")
+			$("#block_" + blockSign[i]).css("background-image", "url(img/seat/block_"+blockSign[i]+"_empty"+".png)"
+        ).css("color", "#F22121");
 			$("#block_" + blockSign[i]).attr("class", "empty");
 		}
 	}
@@ -46,9 +47,9 @@ $("[id^=block]").click(function(){
 		return;
 	}
 	if (selected != 0)
-		$('#' + selected).css("background-image", "url(img/seat/"+selected+".png)");
+		$('#' + selected).css("background-image", "url(img/seat/"+selected+".png)").css("color", "");
 	selected = $(this).attr("id");
-	$(this).css("background-image", "url(img/seat/"+selected+"_selected.png)");
+	$(this).css("background-image", "url(img/seat/"+selected+"_selected.png)").css("color", "#f0ee2d");
 	
 	//更新文字信息
 	var avaiNumber, blockNames = {

@@ -95,9 +95,11 @@ ul{
 	position: static !important;
   width: 90% !important;
   display: block !important;
-  height: 40px !important;
+  height: 60px !important;
+  margin: 10px auto;
   border: 1px solid red;
   border-radius: 6px;
+  color: #30dfe0;
 }
 
 
