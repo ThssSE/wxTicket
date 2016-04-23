@@ -75,8 +75,8 @@ ul{
 	position: relative;
 	font-size: 10px;
 	font-weight: bold;
-	color: rgb(20, 20, 20);
-	opacity: 0.8;
+	/* color: rgb(20, 20, 20); */
+	/* opacity: 0.8; */
 }
 
 #block_A
@@ -96,10 +96,13 @@ ul{
   width: 90% !important;
   display: block !important;
   height: 60px !important;
-  margin: 10px auto;
+  margin: 20px auto;
   border: 1px solid red;
   border-radius: 6px;
   color: #30dfe0;
+}
+.force-btn a {
+  color: inherit;
 }
 
 
