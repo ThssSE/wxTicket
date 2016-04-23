@@ -52,7 +52,11 @@ function checkValidity(req, res, callback)
             {
                 res.render("alert",
                 {
-                    errorinfo:  "已经选过座位啦！座位是"+docs[0].seat,
+                    errorinfo:  "已经选过座位啦！座位是"+ (({
+                      A_area: "一楼池座",
+                      B_area: "一楼楼座",
+                      C_area: "二楼",
+                    })[docs[0].seat] || docs[0].seat),
                     backadd:    urls.ticketInfo+"?ticketid="+req.query.ticketid
                 });
                 chooser_lock[req.query.ticketid]=null;
@@ -139,7 +143,7 @@ router.get("/", function(req, res)
             };
             if (req.query.simple!=null)
             {
-                res.render("seat_simple",inf);
+                res.render("seat",inf);
             }
             else
             {

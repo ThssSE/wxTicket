@@ -90,6 +90,15 @@ ul{
 
 }
 
+.force-btn {
+  background: none !important;
+	position: static !important;
+  width: 90% !important;
+  display: block !important;
+  height: 40px !important;
+  border: 1px solid red;
+  border-radius: 6px;
+}
 
 
 #block_B
