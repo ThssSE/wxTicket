@@ -119,7 +119,8 @@ function setValue(){
       A: "一层池座",
       B: "一层楼座",
       C: "二层",
-    })[seat[0]]);
+      "": "请选座位",
+    })[seat[0] || ""]);
     $("#ticket_place").html("场馆："+ticket.place);
     
     $("#ticket_cancel").html("退票方式：回复 '退票 "+ ticket.name + "'");

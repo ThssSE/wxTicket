@@ -18,9 +18,8 @@
 	//无票的选区
 	for (i = 0; i < 5; i++){
 		if (ticketNum[i] == 0) {
-			$("#block_" + blockSign[i]).css("background-image", "url(img/seat/block_"+blockSign[i]+"_empty"+".png)"
-        ).css("color", "#F22121");
-			$("#block_" + blockSign[i]).attr("class", "empty");
+			$("#block_" + blockSign[i]).css("color", "#F22121");
+			// $("#block_" + blockSign[i]).attr("class", "empty");
 		}
 	}
 	//渲染结束
