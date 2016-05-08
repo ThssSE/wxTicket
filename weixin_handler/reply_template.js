@@ -1,4 +1,3 @@
-var timer=new Date();
 var rich_elem_name_in_db=
 {
     title:          'title',
@@ -10,7 +9,7 @@ exports.rich_attr=rich_elem_name_in_db;
 
 function getCurrentTime()
 {
-    return Math.floor(timer.getTime()/1000);
+    return Math.floor(Date.now()/1000);
 }
 
 //(parsedxml)
