@@ -1,7 +1,7 @@
 var template = require('./reply_template');
 var urls = require("../address_configure");
 var checker = require("./checkRequest");
-var dir = "http://" + urls.hostIP + "/public/apps/";
+var dir = "http://" + urls.IP + "/public/apps/";
 
 var announcement_doc = {
     title: "学生清华校内应用平台免责声明",
