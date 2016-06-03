@@ -2,6 +2,7 @@ var parseString = require('xml2js').parseString;
 var template = require('./reply_template');
 var exactHandler = require('./handler_ticket');
 var usersHandler = require('./handler_account');
+var appsHandler = require('./handler_apps');
 
 //First element is the check function which returns a boolean
 //value indicating whether to execute the branch. The second
@@ -11,6 +12,7 @@ var usersHandler = require('./handler_account');
 //end up in respond something or a time-out will be gauged.
 var pattern =
 [
+    [appsHandler.check_apps,                appsHandler.faire_apps],
     [exactHandler.check_get_ticket,         exactHandler.faire_get_ticket],
     [exactHandler.check_reinburse_ticket,   exactHandler.faire_reinburse_ticket],
     [exactHandler.check_list_ticket,        exactHandler.faire_list_ticket],

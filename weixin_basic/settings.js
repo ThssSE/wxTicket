@@ -14,6 +14,8 @@ var WEIXIN_EVENT_KEYS = {
 	'info_organization': 'V1001_OGNIZATION',
 	'info_job': 'V1001_JOB',
 	'info_vote': 'IN_THE_AIR_VOTE',
+	'app_course': 'APP_COURESE',
+	'app_market': 'APP_MARKET',
     'ticket_book_what': 'TSINGHUA_BOOK_WHAT',
     'ticket_get': 'TSINGHUA_TICKET',
     'account_bind': 'TSINGHUA_BIND',
