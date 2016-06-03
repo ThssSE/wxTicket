@@ -4,8 +4,8 @@ var checker = require("./checkRequest");
 var dir = "http://" + urls.IP + "/public/apps/";
 
 var announcement_doc = {
-    title: "学生清华校内应用平台免责声明",
-    url: dir + "mzsm.htm",
+    title: "学生清华校内应用平台声明",
+    url: dir + "shengming.htm",
 };
 
 exports.check_apps=function(msg)
