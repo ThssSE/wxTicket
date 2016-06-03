@@ -5,7 +5,7 @@ var dir = "http://" + urls.IP + "/public/apps/";
 
 var announcement_doc = {
     title: "学生清华校内应用平台免责声明",
-    url: dir + "mzsm.pdf",
+    url: dir + "mzsm.htm",
 };
 
 exports.check_apps=function(msg)
