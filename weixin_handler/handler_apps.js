@@ -20,7 +20,7 @@ exports.faire_apps = function(msg, res) {
   var picture, title, url;
   switch (app) {
   case "course":
-    title = "ExChange";
+    title = "ExChangeX";
     url = "http://exchangex.cn/";
     picture = dir + "exchangex.jpg";
     break;
