@@ -17,6 +17,7 @@ var db = model.db;
 var getIDClass = model.getIDClass;
 var ACTIVITY_DB = model.activities;
 var TICKET_DB = model.tickets;
+var STUDENT_DB = model.students;
 var SEAT_DB = model.seats;
 
 var seat_row_2 = 8;
@@ -122,6 +123,9 @@ router.get("/export", function(req, res){
 		conf.cols.push({caption:'入场状态', type:'string'});
 		if (seatFlag != 0)
 			conf.cols.push({caption:'座位', type:'string'});
+    conf.cols.push({caption:'身份证号', type:'string'});
+    conf.cols.push({caption:'手机号', type:'string'});
+    conf.cols.push({caption:'要提的问题', type:'string'});
 
 		db[TICKET_DB].find({activity:idObj, status:{$ne:0}}, function(err, docs){
 			if (err)
@@ -129,6 +133,20 @@ router.get("/export", function(req, res){
 				res.send("票务数据库查找出错！");
 				return;
 			}
+      var stu_ids = [];
+      for (var i = 0; i < docs.length; i++) {
+        stu_ids.push(docs[i].stu_id);
+      }
+    db[STUDENT_DB].find({stu_id: {$in: stu_ids}}, function(err, stu_docs) {
+			if (err)
+			{
+				res.send("票务数据库查找用户信息出错！");
+				return;
+			}
+      var stu_infos = {};
+      for (var i = 0; i < stu_docs.length; i++) {
+        stu_infos[stu_docs[i].stu_id] = stu_docs[i];
+      }
 			conf.rows = [];
 			for (var i = 0; i < docs.length; i++)
 			{
@@ -198,6 +216,12 @@ router.get("/export", function(req, res){
 						item.push("未选座");
 				}
 
+        var stu_item = stu_infos[docs[i]["stu_id"]];
+        if (stu_item) {
+          item.push(stu_item.identity || "", stu_item.cell || "", stu_item.ques || "");
+        } else {
+          item.push("", "", "");
+        }
 				conf.rows.push(item);
 			}
 
@@ -215,6 +239,7 @@ router.get("/export", function(req, res){
 							  + new Buffer(filename).toString('binary'));
 
 			res.end(result, 'binary');
+		});
 		});
 	});
 });
