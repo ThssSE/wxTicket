@@ -42,12 +42,12 @@ router.post('/', function(req, res) {
     var identity = req.body.identity;
     var cell = req.body.cell;
     var ques = req.body.ques;
-    if (!cell || !checkCell(cell)) {
-      res.send('ErrorCell');
-      return;
-    }
     if (!identity || get_identity_error(identity)) {
       res.send('ErrorIdentity');
+      return;
+    }
+    if (!cell || !checkCell(cell)) {
+      res.send('ErrorCell');
       return;
     }
     
