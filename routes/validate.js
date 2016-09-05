@@ -46,7 +46,7 @@ router.post('/', function(req, res) {
       res.send('ErrorCell');
       return;
     }
-    if (!identity || !checkCell(identity)) {
+    if (!identity || get_identity_error(identity)) {
       res.send('ErrorIdentity');
       return;
     }
