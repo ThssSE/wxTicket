@@ -10,12 +10,25 @@ var announcement_doc = {
 
 exports.check_apps=function(msg)
 {
-    if (checker.checkMenuClick(msg).substring(0, 4) === "APP_")
+    if (checker.checkMenuClick(msg).substring(0, 4) === "APP_" || msg.MsgType[0]==="text" && msg.Content[0]==="马兰花开")
         return true;
     return false;
 };
 
 exports.faire_apps = function(msg, res) {
+  var app;
+  if (msg.MsgType[0]==="text" && msg.Content[0]==="马兰花开") {
+    title = "马兰花开抢票";
+    url = "http://mp.weixin.qq.com/s?__biz=MzA5MjEzOTQwNA==&mid=502275193&idx=1&sn=e12a14a97fa17961ab6acc652763b4e0&scene=19#wechat_redirect";
+    picture = dir + "mlhk.jpg";
+    description = "";
+    res.send(template.getRichTextTemplate(msg, [{
+      title: title,
+      url: url,
+      picture: picture
+    }]));
+    return;
+  }
   var app = checker.checkMenuClick(msg).substring(4).toLowerCase();
   var picture, title, url;
   switch (app) {
