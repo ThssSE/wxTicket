@@ -47,18 +47,18 @@
           		<div class="form-group" id="groupIdentity">
             		<label for="inputIdentity" class="col-xs-3 control-label">身份证号</label>
             		<div class="col-xs-9">
-              			<input type="text" class="form-control" id="inputIdentity" placeholder="xx xxxx xxxxxxxx xxxX (必填）" name="identity" onblur="checkIdentity();" />
+              			<input type="text" class="form-control" id="inputIdentity" placeholder="xx xxxx xxxxxxxx xxxX (部分活动有要求）" name="identity" onblur="checkIdentity();" />
               			<span class="help-block" id="helpIdentity"></span>
             		</div>
           		</div>
           		<div class="form-group" id="groupCell">
             		<label for="inputCell" class="col-xs-3 control-label">手机号</label>
             		<div class="col-xs-9">
-              			<input type="tel" class="form-control" id="inputCell" placeholder="如：188 xxxx xxxx (必填）" name="cell" onblur="checkCell();" />
+              			<input type="tel" class="form-control" id="inputCell" placeholder="如：188 xxxx xxxx (部分活动有要求）" name="cell" onblur="checkCell();" />
               			<span class="help-block" id="helpCell"></span>
             		</div>
           		</div>
-          		<div class="form-group" id="groupQues">
+          		<div class="form-group" id="groupQues" style="display: none;">
             		<label for="inputQues" class="col-xs-3 control-label">您想在现场提什么问题？</label>
             		<div class="col-xs-9">
               			<textarea type="text" class="form-control" id="inputQues" style="min-height:5em;" name="ques"></textarea>

@@ -277,8 +277,8 @@ function get_identity_error(idcard) {
 }
 
 function checkIdentity() {
-  var val = document.getElementById("inputIdentity").value.trim();
-  var err = get_identity_error(val);
+  var val = document.getElementById("inputIdentity").value;
+  var err = val && get_identity_error(val);
   if (err) {
       document.getElementById("groupIdentity").setAttribute('class', 'form-group has-error');
       var dom = document.getElementById("helpIdentity");
@@ -298,8 +298,8 @@ function checkIdentity() {
 function checkCell() {
   var CELL_REGEXP_STR = '^1(?:[358]\\d|47|7\\d)\\d{8}$';
   var CELL_REGEXP = new RegExp(CELL_REGEXP_STR);
-  var val = document.getElementById("inputCell").value.trim();
-  if (!CELL_REGEXP.test(val)) {
+  var val = document.getElementById("inputCell").value;
+  if (val && !CELL_REGEXP.test(val)) {
       var hintName = "正确的手机号";
       document.getElementById("groupCell").setAttribute('class', 'form-group has-error');
       var dom = document.getElementById("helpCell");
