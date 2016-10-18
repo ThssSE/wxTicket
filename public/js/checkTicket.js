@@ -114,6 +114,7 @@ function setValue(){
 
     $("#ticket_time").html("日期："+ticket.time);
     $("#ticket_title").html(ticket.title);
+    $("#ticket_stu_id").text("拥有者：" + ticket.stu_id);
     $("#ticket_ddl").html("选座截止时间： "+ticket.seatddl);
     $("#ticket_seat").html("座位："+ ({
       A: "一层池座",

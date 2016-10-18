@@ -92,6 +92,7 @@ router.get('/', function(req, res) {
             var activityid = docs[0].activity;
             var ticketstatus = docs[0].status;
             var tiSeat = docs[0].seat;
+            var stu_id = docs[0].stu_id;
 
             db[activities].find({_id: activityid}, function(err, docs1) {
                 if (docs1.length == 0){
@@ -160,6 +161,7 @@ router.get('/', function(req, res) {
                         act_endtime: endTime,
                         act_key: activityKey,
                         tid:req.query.ticketid,
+                        stu_id: stu_id,
                         act_need_seat: docs1[0].need_seat,
                         seat: tiSeat,
                         ticket_status:ticket_status,
