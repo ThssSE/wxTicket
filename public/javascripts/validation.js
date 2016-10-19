@@ -13,72 +13,38 @@ var browserInfo = (function(){
 })();
 
 function hideElem(id) {
+    $("#" + id).hide();
     document.getElementById(id).setAttribute('style', 'display:none');
 }
 
 function showElem(id) {
-    document.getElementById(id).setAttribute('style', 'display:block');
-}
-
-function clearHelp(groupid, helpid) {
-    document.getElementById(groupid).setAttribute('class', 'form-group');
-    //document.getElementById(helpid).setAttribute('hidden', 'hidden');
-    //document.getElementById(helpid).setAttribute('style', 'display:none;');
-    hideElem(helpid);
+    $("#" + id).show();
 }
 
 function clearAllHelps() {
-    clearHelp('usernameGroup', 'helpUsername');
-    clearHelp('passwordGroup', 'helpPassword');
-    clearHelp('groupIdentity', 'helpIdentity');
-    clearHelp('groupCell', 'helpCell');
-    clearHelp('submitGroup', 'helpSubmit');
+    $(".form-group").attr("class", "form-group");
+    $(".help-block").hide();
 }
 
-function showSuccess(groupid, helpid) {
-    document.getElementById(groupid).setAttribute('class', 'form-group has-success');
-    //document.getElementById(helpid).setAttribute('hidden', 'hidden');
-    hideElem(helpid);
+function showSuccess(groupid) {
+    var a = $("#" + groupid);
+    a.attr("class", 'form-group has-success');
+    a.find(".help-block").hide();
 }
 
-function showError(groupid, helpid, text) {
-    var dom = document.getElementById(helpid);
-    if (browserInfo.msie)
-        dom.innerText = text;
-    else
-        dom.textContent = text;
-    //dom.removeAttribute('hidden');
-    showElem(helpid);
-    document.getElementById(groupid).setAttribute('class', 'form-group has-error');
-}
-
-function disableOne(id, flag) {
-    var dom = document.getElementById(id);
-    if (flag) {
-        dom.setAttribute('disabled', 'disabled');
-    } else {
-        dom.removeAttribute('disabled');
-    }
+function showError(groupid, text) {
+    var a = $("#" + groupid);
+    var dom = a.find(".help-block");
+    dom.text(text).show();
+    a.attr("class", 'form-group has-error');
 }
 
 function disableAll(flag) {
-    disableOne('inputUsername', flag);
-    disableOne('inputPassword', flag);
-    disableOne('inputIdentity', flag);
-    disableOne('inputCell', flag);
-    disableOne('inputQues', flag);
-    disableOne('submitBtn', flag);
+    $("input,select,button").prop("disabled", true);
 }
 
 function showLoading(flag) {
-    //var dom = document.getElementById('helpLoading');
-    if (flag) {
-        //dom.removeAttribute('hidden');
-        showElem('helpLoading');
-    } else {
-        //dom.setAttribute('hidden', 'hidden');
-        hideElem('helpLoading');
-    }
+  $('#helpLoading').show(flag)
 }
 
 function readyStateChanged() {
@@ -97,18 +63,18 @@ function readyStateChanged() {
                     return;
 
                 case 'Rejected':
-                    showError('usernameGroup', 'helpUsername', '');
-                    showError('passwordGroup', 'helpPassword', '学号或密码错误！请输入登录info的学号和密码');
+                    showError('usernameGroup', '');
+                    showError('passwordGroup', '学号或密码错误！请输入登录info的学号和密码');
                     break;
 
                 case 'Error':
-                    showError('submitGroup', 'helpSubmit', '出现了奇怪的错误，我们已经记录下来了，请稍后重试。')
+                    showError('submitGroup', '出现了奇怪的错误，我们已经记录下来了，请稍后重试。')
                     break;
             }
         }
         else
         {
-            showError('submitGroup', 'helpSubmit', '服务器连接异常，请稍后重试。')
+            showError('submitGroup', '服务器连接异常，请稍后重试。')
         }
         showLoading(false);
         disableAll(false);
@@ -130,14 +96,15 @@ function submitValidation(openid) {
         $.get("/validate/time", function(data) {
             if (data == '')
                 return;
-            var info = data + "|" + elems[0].value + "|" + elems[1].value;
+            var info = data + "|" + elems[0].value.trim() + "|" + elems[1].value;
             //console.log(data + "|" + elems[0].value + "|" + elems[1].value);
             var key = new RSAKeyPair("10001", "", "89323ab0fba8422ba79b2ef4fb4948ee5158f927f63daebd35c7669fc1af6501ceed5fd13ac1d236d144d39808eb8da53aa0af26b17befd1abd6cfb1dcfba937438e4e95cd061e2ba372d422edbb72979f4ccd32f75503ad70769e299a4143a428380a2bd43c30b0c37fda51d6ee7adbfec1a9d0ad1891e1ae292d8fb992821b");
             var encrypted = {
                 secret:  encryptedString(key, info),
-                identity: elems[2].value,
-                cell: elems[3].value,
-                ques: elems[4].value,
+                identity: elems[2].value.trim(),
+                cell: elems[3].value.trim(),
+                ques: elems[4].value.trim(),
+                depart: elems[5].value.trim(),
                 openid: openid
             };
             $.post("/validate", encrypted, function(data) {
@@ -146,26 +113,29 @@ function submitValidation(openid) {
                     showElem('successHolder');
                 }
                 else if (data == 'Binded'){
-                    showError('submitGroup', 'helpSubmit', '此微信号已被其它学号绑定，请先解绑');
+                    showError('submitGroup', '此微信号已被其它学号绑定，请先解绑');
                 }
                 else if (data == 'Wrong username or password.'){
-                    showError('usernameGroup', 'helpUsername', '');
-                    showError('passwordGroup', 'helpPassword', '学号或密码错误！请输入登录info的学号和密码');
+                    showError('usernameGroup', '');
+                    showError('passwordGroup', '学号或密码错误！请输入登录info的学号和密码');
                 }
                 else if (data == 'Unknown error.'){
-                    showError('submitGroup', 'helpSubmit', '出现了奇怪的错误，我们已经记录下来了，请稍后重试。');
+                    showError('submitGroup', '出现了奇怪的错误，我们已经记录下来了，请稍后重试。');
                 }
                 else if (data == 'Wrong format.'){
-                    showError('submitGroup', 'helpSubmit', '信息格式错误');
+                    showError('submitGroup', '信息格式错误');
                 }
                 else if (data == "Out of date."){
-                    showError('submitGroup', 'helpSubmit', '认证过期');
+                    showError('submitGroup', '认证过期');
                 }
                 else if (data == "ErrorCell"){
-                    showError('submitGroup', 'helpSubmit', '手机号不合法');
+                    showError('groupCell', '手机号不合法');
                 }
                 else if (data == "ErrorIdentity"){
-                    showError('submitGroup', 'helpSubmit', '身份证号不合法');
+                    showError('groupIdentity', '身份证号不合法');
+                }
+                else if (data == "ErrorDepart"){
+                    showError('groupDepartment', '请输入真正的院系名称');
                 }
                 showLoading(false);
                 disableAll(false);
@@ -175,49 +145,37 @@ function submitValidation(openid) {
     return false;
 }
 
-function checkNotEmpty(groupid, helpid, inputid, hintName) {
-    if (document.getElementById(inputid).value.trim().length == 0) {
-        document.getElementById(groupid).setAttribute('class', 'form-group has-error');
-        var dom = document.getElementById(helpid);
-        if (browserInfo.msie)
-            dom.innerText = '请输入' + hintName + '！';
-        else
-            dom.textContent = '请输入' + hintName + '！';
-        //dom.removeAttribute('hidden');
-        showElem(helpid);
+function checkNotEmpty(groupid, hintName) {
+    var val = $("#" + groupid).find("input,select,textarea").val();
+    if (val.trim().length == 0) {
+        showError(groupid, '请输入' + hintName + '！');
         return false;
     } else {
-        showSuccess(groupid, helpid);
+        showSuccess(groupid);
         return true;
     }
 }
 
-function checkIsDigit(groupid, helpid, inputid, hintName) {
-    if (isNaN(document.getElementById(inputid).value)) {
-        document.getElementById(groupid).setAttribute('class', 'form-group has-error');
-        var dom = document.getElementById(helpid);
-        if (browserInfo.msie)
-            dom.innerText = hintName + '必须为数字！';
-        else
-            dom.textContent = hintName + '必须为数字！';
-        //dom.removeAttribute('hidden');
-        showElem(helpid);
+function checkIsDigit(groupid, hintName) {
+    var val = $("#" + groupid).find("input,select,textarea").val();
+    if (isNaN(val)) {
+        showError(groupid, hintName + '必须为数字！');
         return false;
     } else {
-        showSuccess(groupid, helpid);
+        showSuccess(groupid);
         return true;
     }
 }
 
 function checkUsername() {
-    if (checkNotEmpty('usernameGroup', 'helpUsername', 'inputUsername', '学号')) {
-        return checkIsDigit('usernameGroup', 'helpUsername', 'inputUsername', '学号');
+    if (checkNotEmpty('usernameGroup', '学号')) {
+        return checkIsDigit('usernameGroup', '学号');
     }
     return false;
 }
 
 function checkPassword() {
-    return checkNotEmpty('passwordGroup', 'helpPassword', 'inputPassword', '密码');
+    return checkNotEmpty('passwordGroup', '密码');
 }
 
 function get_identity_error(idcard) {
@@ -277,42 +235,32 @@ function get_identity_error(idcard) {
 }
 
 function checkIdentity() {
-  var val = document.getElementById("inputIdentity").value;
+  var groupid = "groupIdentity", root = $("#" + groupid);
+  var val = root.find("input").val();
   var err = val && get_identity_error(val);
   if (err) {
-      document.getElementById("groupIdentity").setAttribute('class', 'form-group has-error');
-      var dom = document.getElementById("helpIdentity");
-      if (browserInfo.msie)
-          dom.innerText = err;
-      else
-          dom.textContent = err;
-      //dom.removeAttribute('hidden');
-      showElem("helpIdentity");
+        showError(groupid, err);
       return false;
   } else {
-      showSuccess("groupIdentity", "helpIdentity");
+      showSuccess(groupid);
       return true;
   }
 }
 
 function checkCell() {
-  var CELL_REGEXP_STR = '^1(?:[358]\\d|47|7\\d)\\d{8}$';
+  var groupid = "groupCell", root = $("#" + groupid);
+  var CELL_REGEXP_STR = '^(?:\\+\\d+\\s?)?1(?:[358]\\d|47|7\\d)\\d{8}$';
   var CELL_REGEXP = new RegExp(CELL_REGEXP_STR);
-  var val = document.getElementById("inputCell").value;
+  var val = root.find("input").val();
   if (val && !CELL_REGEXP.test(val)) {
       var hintName = "正确的手机号";
-      document.getElementById("groupCell").setAttribute('class', 'form-group has-error');
-      var dom = document.getElementById("helpCell");
-      if (browserInfo.msie) {
-          dom.innerText = '请输入' + hintName + '！';
-      } else {
-          dom.textContent = '请输入' + hintName + '！';
+      if (val.indexOf(" ") >= 0 && val.indexOf("+") < 0) {
+        hintName = "手机号中请勿包含空格";
       }
-      //dom.removeAttribute('hidden');
-      showElem("helpCell");
+        showError(groupid, '请输入' + hintName + '！');
       return false;
   } else {
-      showSuccess("groupCell", "helpCell");
+      showSuccess(groupid);
       return true;
   }
 }

@@ -42,6 +42,7 @@ router.post('/', function(req, res) {
     var identity = req.body.identity;
     var cell = req.body.cell;
     var ques = req.body.ques;
+    var depart = req.body.depart;
     if (!identity || get_identity_error(identity)) {
       res.send('ErrorIdentity');
       return;
@@ -72,6 +73,7 @@ router.post('/', function(req, res) {
                             db[students].find({stu_id:stu.data.ID}, function(err, docs) {
                                 if (docs.length == 0){
                                     db[students].insert({stu_id: stu.data.ID, weixin_id: openid, status: 1,
+                                          depart: depart, name: stu.data.name, zzmm: stu.data.zzmm, gender: stu.data.gender, folk: stu.data.folk,
                                           identity: identity, cell: cell, ques: ques}, function(){
                                         lock.release(students);
                                         res.send('Accepted');
@@ -80,6 +82,7 @@ router.post('/', function(req, res) {
                                 }
                                 else{
                                     db[students].update({stu_id: stu.data.ID},  {$set : {status: 1, weixin_id: openid,
+                                          depart: depart, name: stu.data.name, zzmm: stu.data.zzmm, gender: stu.data.gender, folk: stu.data.folk,
                                           identity: identity, cell: cell, ques: ques}}, function() {
                                         lock.release(students);
                                         res.send('Accepted');
@@ -99,6 +102,7 @@ router.post('/', function(req, res) {
                             }
                             if (flag){
                                     db[students].update({stu_id: stu.data.ID},  {$set : {
+                                          depart: depart, name: stu.data.name, zzmm: stu.data.zzmm, gender: stu.data.gender, folk: stu.data.folk,
                                           identity: identity, cell: cell, ques: ques}}, function() {
                                         lock.release(students);
                                         res.send('Accepted');
@@ -124,7 +128,7 @@ router.post('/', function(req, res) {
         });
         resp.on('end', function(){});
     });
-    post_data = querystring.stringify({'secret':  tmp });
+    var post_data = querystring.stringify({'secret':  tmp });
     r.write(post_data);
     r.end();
 });
@@ -133,19 +137,21 @@ module.exports = router;
 
 
 function get_identity_error(idcard) {
+      function int(s) { return s | 0; }
   var Errors=['','身份证号码位数不对!','身份证号码出生日期超出范围或含有非法字符!','身份证号码校验错误!','身份证地区非法!'];
   var area={"11":"北京","12":"天津","13":"河北","14":"山西","15":"内蒙古","21":"辽宁","22":"吉林","23":"黑龙江","31":"上海",
     "32":"江苏","33":"浙江","34":"安徽","35":"福建","36":"江西","37":"山东","41":"河南","42":"湖北","43":"湖南","44":"广东",
     "45":"广西","46":"海南","50":"重庆","51":"四川","52":"贵州","53":"云南","54":"西藏","61":"陕西","62":"甘肃","63":"青海",
     "64":"宁夏","65":"新疆","71":"台湾","81":"香港","82":"澳门","91":"国外"};
-  var idcard = ("" + idcard).trim();
+  idcard = ("" + idcard).trim();
   // 地区校验
   if (!area[idcard.substring(0,2)]) {
     return Errors[4];
   }
+  var ereg, s6;
   // 15位身份号码检测
   if (idcard.length == 15) {
-    var ereg, s6 = idcard.substring(6, 8) | 0;
+    s6 = idcard.substring(6, 8) | 0;
     if ((s6 + 1900) % 4 == 0 || ((s6 + 1900) % 100 == 0 && (s6+1900) % 4 == 0 )) {
       ereg = new RegExp('^[1-9][0-9]{5}[0-9]{2}((01|03|05|07|08|10|12)(0[1-9]|[1-2][0-9]|3[0-1])|(04|06|09|11)(0[1-9]|[1-2][0-9]|30)|02(0[1-9]|[1-2][0-9]))[0-9]{3}$'); //测试出生日期的合法性
     } else {
@@ -155,7 +161,7 @@ function get_identity_error(idcard) {
   }
   // 18位身份号码检测
   if(idcard.length == 18) {
-    var ereg, s6 = idcard.substring(6, 10) | 0;
+    s6 = idcard.substring(6, 10) | 0;
     // 出生日期的合法性检查
     // 闰年月日:((01|03|05|07|08|10|12)(0[1-9]|[1-2][0-9]|3[0-1])|(04|06|09|11)(0[1-9]|[1-2][0-9]|30)|02(0[1-9]|[1-2][0-9]))
     // 平年月日:((01|03|05|07|08|10|12)(0[1-9]|[1-2][0-9]|3[0-1])|(04|06|09|11)(0[1-9]|[1-2][0-9]|30)|02(0[1-9]|1[0-9]|2[0-8]))
@@ -167,7 +173,6 @@ function get_identity_error(idcard) {
     //测试出生日期的合法性
     if(ereg.test(idcard)) {
       //计算校验位
-      function int(s) { return s | 0; }
       var S = (int(idcard[0]) + int(idcard[10])) * 7 + (int(idcard[1]) + int(idcard[11])) * 9 + (int(idcard[2]) +
           int(idcard[12])) * 10 + (int(idcard[3]) + int(idcard[13])) * 5 + (int(idcard[4]) + int(idcard[14])) * 8 +
           (int(idcard[5]) + int(idcard[15])) * 4 + (int(idcard[6]) + int(idcard[16])) * 2 + int(idcard[7]) * 1 +
@@ -190,7 +195,7 @@ function get_identity_error(idcard) {
 
 
 function checkCell(cell) {
-  var CELL_REGEXP_STR = '^1(?:[358]\\d|47|7\\d)\\d{8}$';
+  var CELL_REGEXP_STR = '^(?:\\+\\d+\\s?)?1(?:[358]\\d|47|7\\d)\\d{8}$';
   var CELL_REGEXP = new RegExp(CELL_REGEXP_STR);
   if (!CELL_REGEXP.test(cell)) {
       return false;
