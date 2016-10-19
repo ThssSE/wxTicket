@@ -43,11 +43,11 @@ router.post('/', function(req, res) {
     var cell = req.body.cell;
     var ques = req.body.ques;
     var depart = req.body.depart;
-    if (!identity || get_identity_error(identity)) {
+    if (identity && get_identity_error(identity)) {
       res.send('ErrorIdentity');
       return;
     }
-    if (!cell || !checkCell(cell)) {
+    if (cell && !checkCell(cell)) {
       res.send('ErrorCell');
       return;
     }
