@@ -134,7 +134,7 @@ function getTime(datet,isSecond)
 {
     if (!(datet instanceof Date))
         datet=new Date(datet);
-    datet.getMinutes()
+    datet.getMinutes();
     return datet.getFullYear() + "年"
         + (datet.getMonth()+1) + "月"
         + (datet.getDate()) + "日 "
@@ -171,7 +171,7 @@ router.get("/", function(req, res)
             }
             var seatMap2=[];
             var alpha="ABCDEFGH";
-            for (var i=0;i<8;i++)
+            for (i=0;i<8;i++)
             {
                 if (seatMap[alpha[i]]==null)
                     seatMap2[i]=[];

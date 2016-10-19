@@ -18,7 +18,7 @@ function getTime(datet,isSecond)
 {
     if (!(datet instanceof Date))
         datet=new Date(datet);
-    datet.getMinutes()
+    datet.getMinutes();
     return datet.getFullYear() + "年"
         + (datet.getMonth()+1) + "月"
         + (datet.getDate()) + "日 "

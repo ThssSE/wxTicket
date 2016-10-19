@@ -52,7 +52,7 @@ router.get("/listticket",function(req,res)
             }
             var single;
             var ret=[];
-            for (var i=0;i<docs.length;i++)
+            for (i=0;i<docs.length;i++)
             {
                 single={};
                 single.ticketid=docs[i].unique_id;

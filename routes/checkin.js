@@ -19,7 +19,7 @@ function getTime(datet,isSecond)
 {
     if (!(datet instanceof Date))
         datet=new Date(datet);
-    datet.getMinutes()
+    datet.getMinutes();
     return datet.getFullYear() + "-"
         + (datet.getMonth()+1) + "-"
         + (datet.getDate()) + " "
@@ -43,7 +43,7 @@ router.get("/", function(req, res, next)
             return;
         }
 
-        activity = {
+        var activity = {
             name: docs[0].name,
             start_time: getTime(docs[0].start_time),
             end_time:  getTime(docs[0].end_time),

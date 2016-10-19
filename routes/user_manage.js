@@ -148,7 +148,7 @@ router.get("/export", function(req, res){
         stu_infos[stu_docs[i].stu_id] = stu_docs[i];
       }
 			conf.rows = [];
-			for (var i = 0; i < docs.length; i++)
+			for (i = 0; i < docs.length; i++)
 			{
 				var item = [];
 				item.push(docs[i]["stu_id"]);
@@ -348,12 +348,12 @@ router.get("/detail", function(req, res)
 							var rowNum = 65;
 							var ch;
 							var colNum;
-							for (i = 0; i < seat_row_2; i++)
+							for (var i = 0; i < seat_row_2; i++)
 							{
 								seatArray[i] = [];
 								ch = String.fromCharCode(rowNum);
 								colNum = 1;
-								for (j = 0; j < seat_col_2; j++)
+								for (var j = 0; j < seat_col_2; j++)
 								{
 									if (j == 8 || j == 31 || (j == 30 && i % 2 == 0))
 										seatArray[i][j] = 0;
@@ -644,10 +644,10 @@ router.post("/detail", function(req, res)
 					lock.release(ACTIVITY_DB);
 					return;
 				}
+        var a, b, c, d, e, seatDBmap, st, be;
 				if (docs[0].status == 0) //修改暂存的活动
 				{
-					var a, b, c, d, e;
-					var seatDBmap = {};
+					seatDBmap = {};
 					if (!(activity["name"] && activity["key"] && activity["place"] && activity["description"] &&
 						activity["remain_tickets"] != undefined && activity["pic_url"] && activity["start_time"] &&
 						activity["end_time"] && activity["book_start"] && activity["book_end"] &&
@@ -761,8 +761,8 @@ router.post("/detail", function(req, res)
 						delete activity.seat_map;
 					}
 
-					var st = activity["start_time"];
-					var be = activity["book_end"];
+					st = activity["start_time"];
+					be = activity["book_end"];
 					if (!(moment([moment(be).year(), moment(be).month(), moment(be).date()]).isBefore(
 						[moment(st).year(), moment(st).month(), moment(st).date()])))
 					{
@@ -883,8 +883,7 @@ router.post("/detail", function(req, res)
 				}
 				else //修改已经发布的活动
 				{
-					var a, b, c, d, e;
-					var seatDBmap = {};
+					seatDBmap = {};
 					if (activity.status == 0)
 					{
 						res.send("404#已发布的活动不允许暂存，没有录入数据库！请重新检查。");
@@ -918,8 +917,8 @@ router.post("/detail", function(req, res)
 						lock.release(ACTIVITY_DB);
 						return;
 					}
-					var st = activity["start_time"];
-					var be = activity["book_end"];
+					st = activity["start_time"];
+					be = activity["book_end"];
 					if (!(moment([moment(be).year(), moment(be).month(), moment(be).date()]).isBefore(
 						[moment(st).year(), moment(st).month(), moment(st).date()])))
 					{

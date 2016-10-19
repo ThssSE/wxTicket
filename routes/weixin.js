@@ -14,12 +14,12 @@ router.use(function(req, res, next){
     {
         req.rawData = '';
         req.setEncoding('utf8');
-        req.on('data', function(chunk){ req.rawData += chunk });
+        req.on('data', function(chunk){ req.rawData += chunk; });
         req.on('end', next);    
     }
     else
     {
-        for (i in req.body)
+        for (var i in req.body)
         {
             req.rawData=i;
         }

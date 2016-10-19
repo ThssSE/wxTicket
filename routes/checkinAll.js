@@ -19,7 +19,7 @@ function getTime(datet,isSecond)
 {
     if (!(datet instanceof Date))
         datet=new Date(datet);
-    datet.getMinutes()
+    datet.getMinutes();
     return datet.getFullYear() + "-"
         + (datet.getMonth()+1) + "-"
         + (datet.getDate()) + " "
