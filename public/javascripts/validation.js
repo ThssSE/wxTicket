@@ -40,11 +40,11 @@ function showError(groupid, text) {
 }
 
 function disableAll(flag) {
-    $("input,select,button").prop("disabled", true);
+    $("input,select,button").prop("disabled", flag);
 }
 
 function showLoading(flag) {
-  $('#helpLoading').show(flag)
+  $('#helpLoading').toggle(flag)
 }
 
 function readyStateChanged() {
