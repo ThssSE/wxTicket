@@ -195,7 +195,7 @@ function get_identity_error(idcard) {
 
 
 function checkCell(cell) {
-  var CELL_REGEXP_STR = '^(?:\\+\\d+\\s?)?1(?:[358]\\d|47|7\\d)\\d{8}$';
+  var CELL_REGEXP_STR = '^(?:\\+\\d+\\s?)?1(?:[34578]\\d|66|98)\\d{8}$';
   var CELL_REGEXP = new RegExp(CELL_REGEXP_STR);
   if (!CELL_REGEXP.test(cell)) {
       return false;

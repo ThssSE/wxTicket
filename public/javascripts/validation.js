@@ -101,10 +101,12 @@ function submitValidation(openid) {
             var key = new RSAKeyPair("10001", "", "89323ab0fba8422ba79b2ef4fb4948ee5158f927f63daebd35c7669fc1af6501ceed5fd13ac1d236d144d39808eb8da53aa0af26b17befd1abd6cfb1dcfba937438e4e95cd061e2ba372d422edbb72979f4ccd32f75503ad70769e299a4143a428380a2bd43c30b0c37fda51d6ee7adbfec1a9d0ad1891e1ae292d8fb992821b");
             var encrypted = {
                 secret:  encryptedString(key, info),
-                identity: elems[2].value.trim(),
-                cell: elems[3].value.trim(),
-                ques: elems[4].value.trim(),
-                depart: elems[5].value.trim(),
+                cell: elems[2].value.trim(),
+                // folk: elems[3].value.trim(),
+                // depart: elems[4].value.trim(),
+                // gender: elems[5].value.trim(),
+                identity: elems[6].value.trim(),
+                ques: elems[7].value.trim(),
                 openid: openid
             };
             $.post("/validate", encrypted, function(data) {
@@ -249,7 +251,7 @@ function checkIdentity() {
 
 function checkCell() {
   var groupid = "groupCell", root = $("#" + groupid);
-  var CELL_REGEXP_STR = '^(?:\\+\\d+\\s?)?1(?:[358]\\d|47|7\\d)\\d{8}$';
+  var CELL_REGEXP_STR = '^(?:\\+\\d+\\s?)?1(?:[34578]\\d|66|98)\\d{8}$';
   var CELL_REGEXP = new RegExp(CELL_REGEXP_STR);
   var val = root.find("input").val();
   if (val && !CELL_REGEXP.test(val)) {
