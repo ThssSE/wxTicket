@@ -103,7 +103,7 @@ function submitValidation(openid) {
                 secret:  encryptedString(key, info),
                 cell: elems[2].value.trim(),
                 // folk: elems[3].value.trim(),
-                // depart: elems[4].value.trim(),
+                depart: elems[4].value.trim(),
                 // gender: elems[5].value.trim(),
                 identity: elems[6].value.trim(),
                 ques: elems[7].value.trim(),
