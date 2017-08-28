@@ -124,8 +124,12 @@ router.get("/export", function(req, res){
 		if (seatFlag != 0)
 			conf.cols.push({caption:'座位', type:'string'});
     conf.cols.push({caption:'身份证号', type:'string'});
-    conf.cols.push({caption:'手机号', type:'string'});
-    conf.cols.push({caption:'要提的问题', type:'string'});
+    conf.cols.push({caption:'姓名', type:'string'});
+    conf.cols.push({caption:'民族', type:'string'});
+    conf.cols.push({caption:'院系', type:'string'});
+    conf.cols.push({caption:'性别', type:'string'});
+    // conf.cols.push({caption:'手机号', type:'string'});
+    // conf.cols.push({caption:'要提的问题', type:'string'});
 
 		db[TICKET_DB].find({activity:idObj, status:{$ne:0}}, function(err, docs){
 			if (err)
@@ -218,9 +222,11 @@ router.get("/export", function(req, res){
 
         var stu_item = stu_infos[docs[i]["stu_id"]];
         if (stu_item) {
-          item.push(stu_item.identity || "", stu_item.cell || "", stu_item.ques || "");
+          item.push(stu_item.identity || "", stu_item.name || ""
+            , stu_item.folk || "", stu_item.depart || "", stu_item.gender || "");
         } else {
-          item.push("", "", "");
+          item.push("", ""
+            , "", "", "");
         }
 				conf.rows.push(item);
 			}
