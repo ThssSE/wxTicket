@@ -128,7 +128,7 @@ router.get("/export", function(req, res){
     conf.cols.push({caption:'民族', type:'string'});
     conf.cols.push({caption:'院系', type:'string'});
     conf.cols.push({caption:'性别', type:'string'});
-    // conf.cols.push({caption:'手机号', type:'string'});
+    conf.cols.push({caption:'手机号', type:'string'});
     // conf.cols.push({caption:'要提的问题', type:'string'});
 
 		db[TICKET_DB].find({activity:idObj, status:{$ne:0}}, function(err, docs){
@@ -223,10 +223,12 @@ router.get("/export", function(req, res){
         var stu_item = stu_infos[docs[i]["stu_id"]];
         if (stu_item) {
           item.push(stu_item.identity || "", stu_item.name || ""
-            , stu_item.folk || "", stu_item.depart || "", stu_item.gender || "");
+            , stu_item.folk || "", stu_item.depart || "", stu_item.gender || ""
+            , stu_item.cell || "");
         } else {
           item.push("", ""
-            , "", "", "");
+            , "", "", ""
+            , "");
         }
 				conf.rows.push(item);
 			}

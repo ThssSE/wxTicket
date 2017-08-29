@@ -47,6 +47,10 @@ router.post('/', function(req, res) {
       res.send('ErrorIdentity');
       return;
     }
+    if (!depart) {
+      res.send('ErrorDepart');
+      return;
+    }
     if (cell && !checkCell(cell)) {
       res.send('ErrorCell');
       return;
