@@ -123,7 +123,7 @@ function generateUniqueCode(callback,prefix,actKey)
 }
 function presentTicket(msg,res,tick,act)
 {
-    var tmp="恭喜，抢票成功！\n";
+    var tmp="恭喜，抢票成功！请于9月21 日 17:30到新清华学堂售票处领票\n";
     tmp+=template.getHyperLink("点我查看电子票",urls.ticketInfo+"?ticketid="+tick.unique_id);
     if (act.need_seat!=0)
         tmp+="\n注意:该活动需在抢票结束前选座(区)，请进入电子票选择。";
