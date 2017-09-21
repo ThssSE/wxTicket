@@ -100,6 +100,7 @@ function verifyActivities(actKey,ifFail,ifSucc)
         }
     });
 }
+/*
 function getRandomString()
 {
     var ret="";
@@ -207,7 +208,8 @@ function needValidateMsg(msg) {
   return template.getPlainTextTemplate(msg,'<a href="' + urls.validateAddress
     + '?openid=' + msg.FromUserName +  '">请先点我绑定学号。</a>');
 }
-
+*/
+/*
 exports.check_get_ticket=function(msg)
 {
     if (checker.checkMenuClick(msg).substr(0,basicInfo.WEIXIN_BOOK_HEADER.length)===basicInfo.WEIXIN_BOOK_HEADER)
@@ -486,4 +488,4 @@ exports.faire_list_ticket=function(msg,res)
             });
         });
     });
-}
+}*/

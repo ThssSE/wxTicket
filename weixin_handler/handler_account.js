@@ -12,7 +12,7 @@ var TICKET_DB = model.tickets;
 var USER_DB = model.students;
 var ACTIVITY_DB = model.activities;
 var db = model.db;
-
+/*
 exports.check_bind_accout=function(msg)
 {
     if (msg.MsgType[0]==="text")
@@ -163,4 +163,4 @@ exports.faire_apply_exp=function(msg,res)
     {
         res.send(template.getPlainTextTemplate(msg,"该账号已经绑定。"));
     });
-}
+}*/

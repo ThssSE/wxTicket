@@ -7,7 +7,7 @@ var announcement_doc = {
     title: "学生清华校内应用平台声明",
     url: dir + "shengming.htm",
 };
-
+/*
 exports.check_apps=function(msg)
 {
     if (checker.checkMenuClick(msg).substring(0, 4) === "APP_" || msg.MsgType[0]==="text" && msg.Content[0]==="马兰花开")
@@ -49,4 +49,4 @@ exports.faire_apps = function(msg, res) {
     url: url,
     picture: picture
   }, announcement_doc]));
-};
+};*/
